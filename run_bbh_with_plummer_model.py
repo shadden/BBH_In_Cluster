@@ -5,7 +5,7 @@ import reboundx as rbx
 import ctypes
 
 force_lib = ctypes.cdll.LoadLibrary("./libforces.so")
-myforce.update_accelerations = force_lib.rebx_plummer_potential
+
 
 # Read IC file
 df = pd.read_csv("10000_R3_Plummer_with_BBH.txt",delimiter="\s+")
@@ -48,6 +48,7 @@ rebx.register_param('total_mass','REBX_TYPE_DOUBLE')
 rebx.register_param('half_mass_radius','REBX_TYPE_DOUBLE')
 myforce = rebx.create_force("plummer")
 myforce.force_type = 'pos'
+myforce.update_accelerations = force_lib.rebx_plummer_potential
 rebx.add_force(myforce)
 
 # Total mass is all stars minus BBH
@@ -56,5 +57,5 @@ myforce.params['half_mass_radius']= 3 * PARSEC_TO_AU
 rebx.save("rebxpars.bin")
 
 # SA saves snapshot every 100s of wallitme
-sim.automateSimulationArchive("plummer_sim_archive.bin",walltime=100.) 
-sim.integrate(1e8)
+sim.automateSimulationArchive("plummer_sim_archive.bin",walltime=10.) 
+sim.integrate(1e3)
